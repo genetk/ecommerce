@@ -1,0 +1,18 @@
+{
+    "extends": [
+      "react-app",
+      "eslint:recommended",
+      "plugin:jest/recommended"
+    ],
+    "plugins": ["react", "jest"],
+    "env": {
+      "jest/globals": true
+    },
+    "rules": {
+      "jest/no-disabled-tests": "warn",
+      "jest/no-focused-tests": "error",
+      "jest/prefer-to-have-length": "warn",
+      "jest/valid-expect": "error"
+    }
+  }
+  
