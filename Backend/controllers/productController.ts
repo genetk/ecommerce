@@ -88,7 +88,7 @@ const listProducts = async (req: Request, res: Response):Promise<void> => {
  
   const removeProduct = async (req: Request, res: Response):Promise<void> => {
     try {
-      const { id } = req.params;
+      const { id } = req.body;
       if (!id) {
          res.status(400).json({ success: false, message: "Product ID is required" });
          return
@@ -101,8 +101,8 @@ const listProducts = async (req: Request, res: Response):Promise<void> => {
       }
   
       res.json({ success: true, message: "Product Removed" });
-    } catch (error: any) {
-      console.error(error);
+    } catch (error) {
+     if(error instanceof Error)
       res.status(500).json({ success: false, message: error.message });
     }
   };
@@ -110,7 +110,7 @@ const listProducts = async (req: Request, res: Response):Promise<void> => {
  
   const singleProduct = async (req: Request, res: Response):Promise<void> => {
     try {
-      const { productId } = req.params;
+      const { productId } = req.body;
       if (!productId) {
          res.status(400).json({ success: false, message: "Product ID is required" });
          return

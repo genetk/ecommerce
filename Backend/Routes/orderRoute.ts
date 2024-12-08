@@ -11,11 +11,11 @@ import authUser from "../middleware/auth";
 
 const orderRouter = express.Router();
 
-orderRouter.get("/list", adminAuth, allOrders);
+orderRouter.post("/list", adminAuth, allOrders);
 orderRouter.post("/status", adminAuth, updateStatus);
 
 orderRouter.post("/stripe", authUser, placeOrderStripe);
-
+orderRouter.get('/all-orders', allOrders)
 orderRouter.post("/userorders", authUser, userOrders);
 
 orderRouter.post("/stripe/verifyStripe", authUser, verifyStripe);

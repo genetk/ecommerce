@@ -32,8 +32,8 @@ export { uploadMiddleware };
 
 const productRouter = express.Router();
 productRouter.post("/add", adminAuth, uploadMiddleware, addProduct);
-productRouter.delete("/remove/:id", adminAuth, removeProduct);
-productRouter.get("/single/:productId", singleProduct);
+productRouter.post("/remove", adminAuth, removeProduct);
+productRouter.post("/single", singleProduct);
 productRouter.get("/list", listProducts);
 
 export default productRouter;

@@ -9,8 +9,8 @@ interface LoginProps {
   }  
 const Login = ({setToken}:LoginProps) => {
 
-    const [email,setEmail] = useState('')
-    const [password,setPassword] = useState('')
+    const [email,setEmail] = useState<string>('')
+    const [password,setPassword] = useState<string>('')
 
     const onSubmitHandler = async (e:FormEvent<HTMLFormElement>) => {
         try {

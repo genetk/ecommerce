@@ -37,7 +37,7 @@ const ProductPage = () => {
       return;
     }
     if (productData) {
-      addToCart(productData._id, size, quantity);
+      addToCart(productData._id, size);
       toast.success("Product added to cart");
     }
   };

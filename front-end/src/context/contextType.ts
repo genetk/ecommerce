@@ -64,20 +64,16 @@ export interface OrderResponse {
     showSearch: boolean;
     setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
     cartItems: CartItems;
+    getProductsData:()=>Promise<void>, 
+    addToCart: (itemId: string, size: string) => Promise<void>;
     setCartItems: React.Dispatch<React.SetStateAction<CartItems>>;
-    addToCart: (itemId: string,size:string,  quantity: number) => Promise<void>;
-    updateQuantity: (itemId: string, size: string, quantity: number) => Promise<void>;
-    getProductsData: () => Promise<void>;
-    fetchCart: () => Promise<CartItems>; 
     getCartCount: () => number;
+    updateQuantity: (itemId: string, size: string, quantity: number) => Promise<void>;
     getCartAmount: () => number;
-    category: string;
-    setCategory: React.Dispatch<React.SetStateAction<string>>;
-    subCategory: string;
-    setSubCategory: React.Dispatch<React.SetStateAction<string>>;
     navigate: ReturnType<typeof useNavigate>;
     backendUrl: string;
     setToken: React.Dispatch<React.SetStateAction<string>>;
-    token: string;
+    token: string
   }
   
+ 

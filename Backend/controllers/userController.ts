@@ -7,15 +7,17 @@ import { Request, Response } from 'express';
 
 
 const createToken = (id: string): string => {
-    return Jwt.sign({ id }, process.env.JWT_SECRET as string);
-}
-
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET is not defined in environment variables');
+    }
+    return Jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+  };
 
 const loginUser = async (req: Request, res: Response) => {
     try {
-        console.log("Request body:", req.body);
+        
         const { email, password }: { email: string; password: string } = req.body;
-        console.log("Email received:", email);
+      
         const user = await userModel.findOne({ email });
         console.log("User found:", user);
 
@@ -33,8 +35,8 @@ const loginUser = async (req: Request, res: Response) => {
             res.json({ success: false, message: 'Invalid credentials' });
         }
 
-    } catch (error: any) {
-        console.log(error);
+    } catch (error) {
+        if(error instanceof Error)
         res.json({ success: false, message: error.message });
     }
 }
@@ -91,8 +93,8 @@ if (!password || typeof password !== "string") {
 
         res.json({ success: true, token });
 
-    } catch (error: any) {
-        console.log(error);
+    } catch (error) {
+        if(error instanceof Error)
         res.json({ success: false, message: error.message });
     }
 }
@@ -101,10 +103,7 @@ if (!password || typeof password !== "string") {
 const adminLogin = async (req: Request, res: Response): Promise<void> => {
     try {
         const { email, password }: { email: string; password: string } = req.body;
-        if (req.user.role !== 'admin') {
-            res.status(403).json({ message: 'You are not authorized to access this resource' });
-            return
-        }
+        
         if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
             const token = Jwt.sign(email + password, process.env.JWT_SECRET as string);
             res.json({ success: true, token });

@@ -4,10 +4,12 @@ import axios from 'axios'
 import { backendUrl } from '../App'
 import { toast } from 'react-toastify'
 
+interface TokenProps{
+  token:string
+}
 
-
-const Add = () => {
-  const [token, setToken] = useState<string | null>(localStorage.getItem('authToken'));
+const Add = ({token}:TokenProps) => {
+  
   const [image1,setImage1] = useState<File | null>(null);
   const [image2,setImage2] = useState<File | null>(null)
   const [image3,setImage3] = useState<File | null>(null);
@@ -21,23 +23,12 @@ const Add = () => {
    const [bestseller, setBestseller] = useState<boolean>(false);
    const [sizes, setSizes] = useState<string[]>([]);
 
-   useEffect(() => {
-    const storedToken = localStorage.getItem('authToken');
-    if (storedToken) { 
-    setToken(storedToken);
-    }
-  }, []);
-    // Ensure token exists before making the request
-   
-
+  
+    
    const onSubmitHandler = async (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-   
-        if (!token) {
-        toast.error('No authentication token found!');
-        return;
-      }
+
       try {
       const formData = new FormData()
 
@@ -54,7 +45,7 @@ const Add = () => {
       image3 && formData.append("image3",image3)
       image4 && formData.append("image4",image4)
 
-      const response = await axios.post(backendUrl + "/api/product/add",formData,{headers:{Authorization: `Bearer ${token}`,"Content-Type": "multipart/form-data", },})
+      const response = await axios.post(backendUrl + "/api/product/add",formData,{headers:{Authorization: `Bearer ${token}`,"Content-Type": "multipart/form-data" },})
 
       if (response.data.success) {
         toast.success(response.data.message)

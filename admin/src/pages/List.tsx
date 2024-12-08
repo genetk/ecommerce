@@ -17,7 +17,7 @@ interface ListProps {
   token: string;
 }
 
-const List: React.FC<ListProps> = ({ token }) => {
+const List = ({ token }:ListProps) => {
   const [list, setList] = useState<Product[]>([]);
 
 
@@ -29,9 +29,10 @@ const List: React.FC<ListProps> = ({ token }) => {
       } else {
         toast.error(response.data.message);
       }
-    } catch (error: any) {
-      console.error(error);
-      toast.error(error.message || 'Failed to fetch the product list');
+    } catch (error) {
+      if(error instanceof Error)
+      console.error(error.message);
+      toast.error('Failed to fetch the product list');
     }
   };
 
@@ -41,7 +42,7 @@ const List: React.FC<ListProps> = ({ token }) => {
       const response = await axios.post(
         `${backendUrl}/api/product/remove`,
         { id },
-        { headers: { token } }
+        { headers: {Authorization: `Bearer ${token}` }  }
       );
 
       if (response.data.success) {
