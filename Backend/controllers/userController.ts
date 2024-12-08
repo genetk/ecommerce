@@ -5,12 +5,12 @@ import { userModel } from "../model/userModel";
 import { Request, Response } from 'express';
 
 
-// Define a helper function to create JWT tokens
+
 const createToken = (id: string): string => {
     return Jwt.sign({ id }, process.env.JWT_SECRET as string);
 }
 
-// Route for user login
+
 const loginUser = async (req: Request, res: Response) => {
     try {
         console.log("Request body:", req.body);
@@ -39,7 +39,7 @@ const loginUser = async (req: Request, res: Response) => {
     }
 }
 
-// Route for user registration
+
 const registerUser = async (req: Request, res: Response): Promise<void> => {
     try {
         const { name="", email="", password="" }: { name: string; email: string; password: string } = req.body;
@@ -58,14 +58,14 @@ if (!password || typeof password !== "string") {
     res.status(400).json({ success: false, message: "Password is required and must be a string." });
     return;
 }
-        // Check if user already exists
+       
         const exists = await userModel.findOne({ email });
         if (exists) {
             res.json({ success: false, message: "User already exists" });
             return;
         }
 
-        // Validate email format and password strength
+      
         if (!validator.isEmail(email)) {
             res.json({ success: false, message: "Please enter a valid email" });
             return;
@@ -75,7 +75,7 @@ if (!password || typeof password !== "string") {
             return;
         }
 
-        // Hashing user password
+        
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -97,7 +97,7 @@ if (!password || typeof password !== "string") {
     }
 }
 
-// Route for admin login
+
 const adminLogin = async (req: Request, res: Response): Promise<void> => {
     try {
         const { email, password }: { email: string; password: string } = req.body;

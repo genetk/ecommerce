@@ -1,9 +1,9 @@
-import mongoose, { InferSchemaType, Schema, model } from "mongoose";
+import  { InferSchemaType, Schema, model } from "mongoose";
 export interface IUser {
-    name: string;           // User's full name
-    email: string;          // User's email (unique)
-    password: string;       // User's password (hashed)
-    cartData: Record<string, any>;  // Cart data (object with dynamic keys)
+    name: string;         
+    email: string;        
+    password: string;      
+    cartData: Record<string, any>;  
    
   }
 const userSchema=new Schema({

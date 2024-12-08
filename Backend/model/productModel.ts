@@ -1,15 +1,15 @@
 
 import { InferSchemaType, Schema, model } from "mongoose";
 export interface IProduct {
-    name: string;           // Name of the product
-    description: string;    // Description of the product
-    price: number;          // Price of the product
-    image: string[];        // Array of image URLs (or file paths)
-    category: string;       // Category of the product (e.g., "Electronics")
-    subCategory: string;    // Subcategory of the product (e.g., "Smartphones")
-    sizes: string[];       // Array of available sizes (e.g., ["S", "M", "L"])
-    bestseller?: boolean;   // Whether the product is a bestseller (optional)
-    date: number;           // Date when the product was added (timestamp)
+    name: string;          
+    description: string;    
+    price: number;          
+    image: string[];      
+    category: string;       
+    subCategory: string;   
+    sizes: string[];       
+    bestseller?: boolean;  
+    date: number;           
   }
 const productSchema=new Schema({
     name: { type: String, required: true },

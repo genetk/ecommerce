@@ -1,35 +1,3 @@
-// import jwt from 'jsonwebtoken'
-// import { Request, Response, NextFunction } from "express";
-// interface DecodedToken {
-//     id: string;
-//     [key: string]: any; // This allows for additional properties in the token
-// }
-// const authUser = async (req:Request, res:Response, next:NextFunction):Promise<void> => {
-
-//     const { token } = req.headers;
-
-//     if (!token) {
-//          res.json({ success: false, message: 'Not Authorized Login Again' })
-//          return
-//     }
-
-//     try {
-//       if(process.env.JWT_SECRET){
-//         const tokenString = Array.isArray(token) ? token[0] : token;
-//         const token_decode = jwt.verify(tokenString, process.env.JWT_SECRET) as DecodedToken
-        
-//         req.body.userId = token_decode.id
-//       }
-//         next()
-
-//     } catch (error) {
-//       if(error instanceof Error)
-//         res.json({ success: false, message: error.message })
-//     }
-
-// }
-
-// export default authUser
 
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';

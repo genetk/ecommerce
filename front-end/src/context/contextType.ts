@@ -29,29 +29,29 @@ export interface OrderResponse {
   orders: Order[];
 }
   export interface Product {
-    _id: string; // Unique identifier for the product
-    name: string; // Name of the product
-    description: string; // Product description
-    price: number; // Price of the product
-    image: string[]; // Array of image URLs for the product
-    category: string; // Category of the product (e.g., 'electronics', 'clothing', etc.)
+    _id: string; 
+    name: string; 
+    description: string; 
+    price: number; 
+    image: string[];
+    category: string; 
     subCategory:string;
-    stock: number; // Quantity available in stock
-    sizes?: string[]; // Available sizes (optional)
-    color?: string[]; // Available colors (optional)
-    brand?: string; // Brand of the product (optional)
-    rating?: number; // Average rating (optional)
-    reviewsCount?: number; // Number of reviews (optional)
-    createdAt: string; // Timestamp of when the product was added
-    updatedAt: string; // Timestamp of when the product was last updated
-    [key: string]: any; // For any additional properties that might be added
+    stock: number;
+    sizes?: string[];
+    color?: string[]; 
+    brand?: string; 
+    rating?: number; 
+    reviewsCount?: number; 
+    createdAt: string; 
+    updatedAt: string; 
+    [key: string]: any; 
   }
   
   export interface Review {
-    userId: string; // ID of the user who submitted the review
-    rating: number; // Rating given by the user (e.g., 1-5)
-    comment?: string; // Optional comment for the review
-    createdAt: string; // Date when the review was submitted
+    userId: string; 
+    rating: number; 
+    comment?: string; 
+    createdAt: string; 
   }
   
   
@@ -68,7 +68,7 @@ export interface OrderResponse {
     addToCart: (itemId: string,size:string,  quantity: number) => Promise<void>;
     updateQuantity: (itemId: string, size: string, quantity: number) => Promise<void>;
     getProductsData: () => Promise<void>;
-    fetchCart: () => Promise<CartItems>; // Ensure the type matches the function
+    fetchCart: () => Promise<CartItems>; 
     getCartCount: () => number;
     getCartAmount: () => number;
     category: string;

@@ -21,25 +21,22 @@ interface Files {
 }
 const addProduct = async (req: Request, res: Response): Promise<void> => {
   try {
-    // Destructure form fields from req.body
+   
     const { name, description, price, category, subCategory, sizes, bestseller } = req.body;
 
-    // if (!subCategory) {
-    //   res.json({ success: false, message: "subCategory is required" });
-    //   return 
-    // }
+    
     const files = req.files as Files;
 
-    // Access uploaded files from req.files (with type assertions)
+    
     const image1 = files.image1 && files.image1[0];
     const image2 = files.image2 && files.image2[0];
     const image3 = files.image3 && files.image3[0];
     const image4 = files.image4 && files.image4[0];
 
-    // Filter undefined files
+    
     const images = [image1, image2, image3, image4].filter((item) => item !== undefined) as Express.Multer.File[];
 
-    // Upload images to Cloudinary and get URLs
+   
     const imagesUrl: string[] = await Promise.all(
       images.map(async (item) => {
         const result = await cloudinary.v2.uploader.upload(item.path, { resource_type: 'image' });
@@ -47,7 +44,7 @@ const addProduct = async (req: Request, res: Response): Promise<void> => {
       })
     );
 
-    // Prepare the product data object
+   
     const productData: ProductData = {
       name,
       description,
@@ -62,12 +59,12 @@ const addProduct = async (req: Request, res: Response): Promise<void> => {
 
     console.log(productData);
 
-    // Save product data to the database
+  
     const product = await productModel.create(productData);
   
 
-    // Send success response
-    res.json({ success: true, message: 'Product Added' });
+    
+    res.json({ success: true, message: 'Product Added' ,data:product});
 
   } catch (error) {
    if(error instanceof Error)
@@ -75,7 +72,7 @@ const addProduct = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// Function to list all products
+
 const listProducts = async (req: Request, res: Response):Promise<void> => {
     try {
       const products = await productModel.find({});
@@ -88,7 +85,7 @@ const listProducts = async (req: Request, res: Response):Promise<void> => {
     }
   };
   
-  // Function to remove a product
+ 
   const removeProduct = async (req: Request, res: Response):Promise<void> => {
     try {
       const { id } = req.params;
@@ -110,7 +107,7 @@ const listProducts = async (req: Request, res: Response):Promise<void> => {
     }
   };
   
-  // Function to get information about a single product
+ 
   const singleProduct = async (req: Request, res: Response):Promise<void> => {
     try {
       const { productId } = req.params;

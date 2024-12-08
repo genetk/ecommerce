@@ -4,7 +4,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import { backendUrl, currency } from '../App'
 import { toast } from 'react-toastify'
-import { assets } from '../assets/assets'
+
 interface Item {
   name: string;
   quantity: number;
@@ -33,7 +33,7 @@ interface Order {
   status: string;
 }
 
-// Props interface for token
+
 interface OrdersProps {
   token: string;
 }

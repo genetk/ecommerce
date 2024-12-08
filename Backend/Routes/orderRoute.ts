@@ -1,24 +1,23 @@
-import express from 'express'
-import { allOrders, userOrders, updateStatus,verifyStripe, placeOrderStripe} from '../controllers/orderController'
-import adminAuth  from '../middleware/adminAuth'
-import authUser from '../middleware/auth'
+import express from "express";
+import {
+  allOrders,
+  userOrders,
+  updateStatus,
+  verifyStripe,
+  placeOrderStripe,
+} from "../controllers/orderController";
+import adminAuth from "../middleware/adminAuth";
+import authUser from "../middleware/auth";
 
-const orderRouter = express.Router()
+const orderRouter = express.Router();
 
-// Admin Features
-orderRouter.get('/list',adminAuth,allOrders)
-orderRouter.post('/status',adminAuth,updateStatus)
+orderRouter.get("/list", adminAuth, allOrders);
+orderRouter.post("/status", adminAuth, updateStatus);
 
-// Payment Features
+orderRouter.post("/stripe", authUser, placeOrderStripe);
 
-orderRouter.post('/stripe',authUser,placeOrderStripe)
+orderRouter.post("/userorders", authUser, userOrders);
 
+orderRouter.post("/stripe/verifyStripe", authUser, verifyStripe);
 
-// User Feature 
-orderRouter.post('/userorders',authUser,userOrders)
-
-// verify payment
-orderRouter.post('/stripe/verifyStripe',authUser, verifyStripe)
-
-
-export default orderRouter
+export default orderRouter;

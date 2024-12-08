@@ -3,16 +3,16 @@ import React, { useEffect, useState } from 'react';
 import { backendUrl, currency } from '../App';
 import { toast } from 'react-toastify';
 
-// Define the Product type based on the expected API response
+
 interface Product {
   _id: string;
   name: string;
   category: string;
   price: number;
-  image: string[]; // Assuming the `image` field is an array of strings (URLs)
+  image: string[]; 
 }
 
-// Props interface
+
 interface ListProps {
   token: string;
 }
@@ -20,7 +20,7 @@ interface ListProps {
 const List: React.FC<ListProps> = ({ token }) => {
   const [list, setList] = useState<Product[]>([]);
 
-  // Fetch the product list
+
   const fetchList = async (): Promise<void> => {
     try {
       const response = await axios.get(`${backendUrl}/api/product/list`);
@@ -35,7 +35,7 @@ const List: React.FC<ListProps> = ({ token }) => {
     }
   };
 
-  // Remove a product by its ID
+
   const removeProduct = async (id: string): Promise<void> => {
     try {
       const response = await axios.post(
@@ -64,7 +64,7 @@ const List: React.FC<ListProps> = ({ token }) => {
     <>
       <p className="mb-2">All Products List</p>
       <div className="flex flex-col gap-2">
-        {/* ------- List Table Title ---------- */}
+       
         <div className="hidden md:grid grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center py-1 px-2 border bg-gray-100 text-sm">
           <b>Image</b>
           <b>Name</b>
@@ -73,7 +73,7 @@ const List: React.FC<ListProps> = ({ token }) => {
           <b className="text-center">Action</b>
         </div>
 
-        {/* ------ Product List ------ */}
+      
         {list.map((item) => (
           <div
             className="grid grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border text-sm"

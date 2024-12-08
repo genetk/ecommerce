@@ -4,15 +4,14 @@ import userModel from '../model/userModel';
 import Stripe from 'stripe';
 
 
-// global variables
 const currency = '$';
 const deliveryCharge = 10;
 
-// gateway initialization
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-11-20.acacia' });
 
 
-// Placing orders using Stripe Method
+
 const placeOrderStripe = async (req: Request, res: Response): Promise<void> => {
     try {
         const { userId, items, amount, address } = req.body;
@@ -67,7 +66,7 @@ const placeOrderStripe = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-// Verify Stripe
+
 const verifyStripe = async (req: Request, res: Response): Promise<void> => {
     const { orderId, success, userId } = req.body;
 
@@ -90,7 +89,7 @@ const verifyStripe = async (req: Request, res: Response): Promise<void> => {
 
 
 
-// All Orders data for Admin Panel
+
 const allOrders = async (req: Request, res: Response): Promise<void> => {
     try {
         const orders = await orderModel.find({});
@@ -101,7 +100,7 @@ const allOrders = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-// User Order Data For Frontend
+
 const userOrders = async (req: Request, res: Response): Promise<void> => {
     try {
         const { userId }:{ userId: string }  = req.body;
@@ -114,7 +113,7 @@ const userOrders = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
-// Update order status from Admin Panel
+
 const updateStatus = async (req: Request, res: Response): Promise<void> => {
     try {
         const { orderId, status } : { orderId: string; status: string } = req.body;
