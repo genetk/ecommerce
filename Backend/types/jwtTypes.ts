@@ -3,4 +3,5 @@ export interface JWTContent {
     name: string;
     email: string;
     password: string;
+   
 }

@@ -101,7 +101,10 @@ if (!password || typeof password !== "string") {
 const adminLogin = async (req: Request, res: Response): Promise<void> => {
     try {
         const { email, password }: { email: string; password: string } = req.body;
-
+        if (req.user.role !== 'admin') {
+            res.status(403).json({ message: 'You are not authorized to access this resource' });
+            return
+        }
         if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
             const token = Jwt.sign(email + password, process.env.JWT_SECRET as string);
             res.json({ success: true, token });
@@ -109,8 +112,8 @@ const adminLogin = async (req: Request, res: Response): Promise<void> => {
             res.json({ success: false, message: "Invalid credentials" });
         }
 
-    } catch (error: any) {
-        console.log(error);
+    } catch (error) {
+     if(error instanceof Error)
         res.json({ success: false, message: error.message });
     }
 }

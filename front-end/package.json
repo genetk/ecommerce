@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@nodelib/fs.walk": "^3.0.1",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
     "cra-template-typescript": "1.2.0",
     "postcss": "^8.4.49",
+    "postcss-loader": "^8.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^6.0.0",

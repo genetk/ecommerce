@@ -1,15 +1,13 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import {assets} from '../assets/assets'
 import axios from 'axios'
 import { backendUrl } from '../App'
 import { toast } from 'react-toastify'
 
-interface AddProps {
-  token: string;
-}
 
-const Add = ({token}:AddProps) => {
 
+const Add = () => {
+  const [token, setToken] = useState<string | null>(localStorage.getItem('authToken'));
   const [image1,setImage1] = useState<File | null>(null);
   const [image2,setImage2] = useState<File | null>(null)
   const [image3,setImage3] = useState<File | null>(null);
@@ -23,11 +21,24 @@ const Add = ({token}:AddProps) => {
    const [bestseller, setBestseller] = useState<boolean>(false);
    const [sizes, setSizes] = useState<string[]>([]);
 
+   useEffect(() => {
+    const storedToken = localStorage.getItem('authToken');
+    if (storedToken) { 
+    setToken(storedToken);
+    }
+  }, []);
+    // Ensure token exists before making the request
+   
+
    const onSubmitHandler = async (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      
+   
+        if (!token) {
+        toast.error('No authentication token found!');
+        return;
+      }
+      try {
       const formData = new FormData()
 
       formData.append("name",name)
@@ -43,17 +54,18 @@ const Add = ({token}:AddProps) => {
       image3 && formData.append("image3",image3)
       image4 && formData.append("image4",image4)
 
-      const response = await axios.post(backendUrl + "/api/product/add",formData,{headers:{token}})
+      const response = await axios.post(backendUrl + "/api/product/add",formData,{headers:{Authorization: `Bearer ${token}`,"Content-Type": "multipart/form-data", },})
 
       if (response.data.success) {
         toast.success(response.data.message)
         setName('')
         setDescription('')
+        setPrice('')
         setImage1(null)
         setImage2(null)
         setImage3(null)
         setImage4(null)
-        setPrice('')
+       
       } else {
         toast.error(response.data.message)
       }
