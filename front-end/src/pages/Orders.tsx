@@ -35,7 +35,11 @@ const Orders = () => {
         });
         setorderData(allOrdersItem.reverse());
       }
-    } catch (error) {}
+    } catch (error) {
+      if(error instanceof Error){
+        console.error("Failed to load order data:", error.message);
+      }
+    }
   };
 
   useEffect(() => {

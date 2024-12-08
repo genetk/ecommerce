@@ -61,8 +61,10 @@ const ShopContextProvider = ({ children }: ShopContextProviderProps) => {
       setCartItems(response.data.cart);
       toast.success("Item added to cart");
     } catch (error) {
-      console.error("Error adding to cart:", error);
+      if(error instanceof Error){
+      console.error("Error adding to cart:",error.message);
       toast.error("Error adding to cart");
+      }
     }
   };
 
