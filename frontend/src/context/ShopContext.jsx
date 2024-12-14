@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 export const ShopContext = createContext();
 
 const ShopContextProvider = (props) => {
-  const currency = "$";
+  const currency = "usd";
   const delivery_fee = 10;
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const [search, setSearch] = useState("");
