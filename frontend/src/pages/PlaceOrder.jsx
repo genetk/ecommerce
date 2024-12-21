@@ -31,8 +31,7 @@ const PlaceOrder = () => {
   });
 
   const onChangeHandler = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
+   const{name,value}=event.target
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
