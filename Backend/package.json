@@ -25,6 +25,10 @@
     "validator": "^13.12.0"
   },
   "devDependencies": {
-    "@types/stripe": "^8.0.417"
+    "@eslint/js": "^9.17.0",
+    "@types/stripe": "^8.0.417",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react": "^7.37.2",
+    "globals": "^15.14.0"
   }
 }
