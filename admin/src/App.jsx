@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState ,useCallback} from "react";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import { Routes, Route } from "react-router-dom";
@@ -10,25 +10,34 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const backendUrl = process.env.REACT_APP_BACKEND_URL;
-export const currency = "usd";
-
+export const currency="usd"
 const App = () => {
-  const [token, setToken] = useState(
-    localStorage.getItem("token") ? localStorage.getItem("token") : ""
-  );
+  
+  const storedToken = localStorage.getItem("token") || "";
+  const [token, setToken] = useState(storedToken);
 
+ 
+ 
   useEffect(() => {
-    localStorage.setItem("token", token);
+    const timeout = setTimeout(() => {
+      localStorage.setItem("token", token);
+    }, 300); 
+    return () => clearTimeout(timeout);
   }, [token]);
+
+
+  const handleSetToken = useCallback((newToken) => {
+    setToken(newToken);
+  }, []);
 
   return (
     <div className="bg-gray-50 min-h-screen">
       <ToastContainer />
       {token === "" ? (
-        <Login setToken={setToken} />
+        <Login setToken={handleSetToken} />
       ) : (
         <>
-          <Navbar setToken={setToken} />
+          <Navbar setToken={handleSetToken} />
           <hr />
           <div className="flex w-full">
             <Sidebar />

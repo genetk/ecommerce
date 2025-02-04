@@ -1,10 +1,15 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
 
 const CartTotal = () => {
   const { currency, delivery_fee, getCartAmount } = useContext(ShopContext);
 
+  const totalAmount = useMemo(() => {
+    return getCartAmount();
+  }, [getCartAmount]);
+
+  const totalWithShipping = totalAmount === 0 ? 0 : totalAmount + delivery_fee;
   return (
     <div className="w-full">
       <div className="text-2xl">
@@ -15,7 +20,7 @@ const CartTotal = () => {
         <div className="flex justify-between">
           <p>Subtotal</p>
           <p>
-            {currency} {getCartAmount()}.00
+            {currency} {totalAmount}.00
           </p>
         </div>
         <hr />
@@ -29,8 +34,7 @@ const CartTotal = () => {
         <div className="flex justify-between">
           <b>Total</b>
           <b>
-            {currency}{" "}
-            {getCartAmount() === 0 ? 0 : getCartAmount() + delivery_fee}.00
+            {currency} {totalWithShipping}.00
           </b>
         </div>
       </div>

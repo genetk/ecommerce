@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState ,useMemo} from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -157,7 +157,7 @@ const ShopContextProvider = (props) => {
     }
   }, [token]);
 
-  const value = {
+  const value =useMemo(()=>({
     products,
     currency,
     delivery_fee,
@@ -175,7 +175,7 @@ const ShopContextProvider = (props) => {
     backendUrl,
     setToken,
     token,
-  };
+  }),[products,search,showSearch,cartItems,token]);
 
   return (
     <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>

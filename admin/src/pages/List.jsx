@@ -1,49 +1,54 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { backendUrl, currency } from "../App";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 
 const List = ({ token }) => {
   const [list, setList] = useState([]);
+  const hasFetched = useRef(false); 
 
-  const fetchList = async () => {
+  const fetchList = useCallback(async () => {
     try {
-      const response = await axios.get(backendUrl + "/api/product/list");
+      const response = await axios.get(`${backendUrl}/api/product/list`);
       if (response.data.success) {
         setList(response.data.products.reverse());
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching product list:", error);
       toast.error(error.message);
     }
-  };
+  }, []);
 
-  const removeProduct = async (id) => {
+  const removeProduct = useCallback(async (id) => {
     try {
+      setList((prevList) => prevList.filter((item) => item._id !== id)); 
       const response = await axios.post(
-        backendUrl + "/api/product/remove",
+        `${backendUrl}/api/product/remove`,
         { id },
         { headers: { token } }
       );
 
       if (response.data.success) {
         toast.success(response.data.message);
-        await fetchList();
+        fetchList(); 
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error removing product:", error);
       toast.error(error.message);
     }
-  };
+  }, [fetchList, token]);
 
   useEffect(() => {
-    fetchList();
-  }, []);
+    if (!hasFetched.current) {
+      hasFetched.current = true;
+      fetchList();
+    }
+  }, [fetchList]);
 
   return (
     <>
@@ -57,12 +62,12 @@ const List = ({ token }) => {
           <b className="text-center">Action</b>
         </div>
 
-        {list.map((item, index) => (
+        {list.map((item) => (
           <div
             className="grid grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border text-sm"
-            key={index}
+            key={item._id}
           >
-            <img className="w-12" src={item.image[0]} alt="" />
+            <img className="w-12" src={item.image[0]} alt={item.name} />
             <p>{item.name}</p>
             <p>{item.category}</p>
             <p>
@@ -81,7 +86,9 @@ const List = ({ token }) => {
     </>
   );
 };
+
 List.propTypes = {
-  token: PropTypes.string.isRequired, 
+  token: PropTypes.string.isRequired,
 };
+
 export default List;
