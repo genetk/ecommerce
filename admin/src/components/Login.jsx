@@ -8,9 +8,9 @@ import PropTypes from "prop-types";
 const Login = ({ setToken }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  },[]);
 
   const loginUser = async () => {
     try {

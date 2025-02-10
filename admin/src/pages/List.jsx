@@ -1,13 +1,64 @@
+
 import axios from "axios";
-import { useEffect, useState, useCallback, useRef } from "react";
+import React,{ useEffect, useState, useCallback, useRef } from "react";
 import { backendUrl, currency } from "../App";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 
+
+const debounce = (func, delay) => {
+  let timeoutId;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay);
+  };
+};
+
+
+const ListItem = React.memo(({ item, onRemove }) => (
+  <div
+    className="grid grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border text-sm"
+    key={item._id}
+  >
+    <img
+      className="w-12"
+      src={item.image[0]}
+      alt={item.name}
+      loading="lazy"  
+    />
+    <p>{item.name}</p>
+    <p>{item.category}</p>
+    <p>
+      {currency}
+      {item.price}
+    </p>
+    <p
+      onClick={() => onRemove(item._id)}
+      className="text-right md:text-center cursor-pointer text-lg"
+    >
+      X
+    </p>
+  </div>
+));
+
+ListItem.displayName = "ListItem";  
+
+ListItem.propTypes = {
+  item: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    image: PropTypes.array.isRequired,
+    name: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+  }).isRequired,
+  onRemove: PropTypes.func.isRequired,
+};
+
 const List = ({ token }) => {
   const [list, setList] = useState([]);
-  const hasFetched = useRef(false); 
+  const hasFetched = useRef(false);
 
+  
   const fetchList = useCallback(async () => {
     try {
       const response = await axios.get(`${backendUrl}/api/product/list`);
@@ -17,14 +68,24 @@ const List = ({ token }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error("Error fetching product list:", error);
       toast.error(error.message);
     }
   }, []);
 
+  
+  const debouncedFetchList = useCallback(debounce(fetchList, 500), [fetchList]);
+
+  useEffect(() => {
+    if (!hasFetched.current) {
+      hasFetched.current = true;
+      debouncedFetchList();  
+    }
+  }, [debouncedFetchList]);
+
+  
   const removeProduct = useCallback(async (id) => {
+    setList((prevList) => prevList.filter((item) => item._id !== id));  // Optimistic update
     try {
-      setList((prevList) => prevList.filter((item) => item._id !== id)); 
       const response = await axios.post(
         `${backendUrl}/api/product/remove`,
         { id },
@@ -33,21 +94,19 @@ const List = ({ token }) => {
 
       if (response.data.success) {
         toast.success(response.data.message);
-        fetchList(); 
       } else {
         toast.error(response.data.message);
+        fetchList();  
       }
     } catch (error) {
-      console.error("Error removing product:", error);
       toast.error(error.message);
+      fetchList();  
     }
   }, [fetchList, token]);
 
+  
   useEffect(() => {
-    if (!hasFetched.current) {
-      hasFetched.current = true;
-      fetchList();
-    }
+    fetchList();
   }, [fetchList]);
 
   return (
@@ -63,24 +122,7 @@ const List = ({ token }) => {
         </div>
 
         {list.map((item) => (
-          <div
-            className="grid grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border text-sm"
-            key={item._id}
-          >
-            <img className="w-12" src={item.image[0]} alt={item.name} />
-            <p>{item.name}</p>
-            <p>{item.category}</p>
-            <p>
-              {currency}
-              {item.price}
-            </p>
-            <p
-              onClick={() => removeProduct(item._id)}
-              className="text-right md:text-center cursor-pointer text-lg"
-            >
-              X
-            </p>
-          </div>
+          <ListItem key={item._id} item={item} onRemove={removeProduct} />
         ))}
       </div>
     </>

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
@@ -6,18 +7,24 @@ import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 
 const Add = ({ token }) => {
-  const [image1, setImage1] = useState(false);
-  const [image2, setImage2] = useState(false);
-  const [image3, setImage3] = useState(false);
-  const [image4, setImage4] = useState(false);
+  const [image1, setImage1] = useState(null); 
+  const [image2, setImage2] = useState(null);
+  const [image3, setImage3] = useState(null);
+  const [image4, setImage4] = useState(null);
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [product, setProduct] = useState({ name: "", description: "" });
+  const [price, setPrice] = useState(""); 
   const [category, setCategory] = useState("Men");
   const [subCategory, setSubCategory] = useState("Topwear");
   const [bestseller, setBestseller] = useState(false);
   const [sizes, setSizes] = useState([]);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProduct((prevProduct) => ({
+      ...prevProduct,  
+      [name]: value,   
+    }));
+  };
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -25,18 +32,19 @@ const Add = ({ token }) => {
     try {
       const formData = new FormData();
 
-      formData.append("name", name);
-      formData.append("description", description);
+      
+  formData.append("name", product.name);
+  formData.append("description", product.description);
       formData.append("price", price);
       formData.append("category", category);
       formData.append("subCategory", subCategory);
       formData.append("bestseller", bestseller);
       formData.append("sizes", JSON.stringify(sizes));
 
-      image1 && formData.append("image1", image1);
-      image2 && formData.append("image2", image2);
-      image3 && formData.append("image3", image3);
-      image4 && formData.append("image4", image4);
+      if (image1) formData.append("image1", image1);
+      if (image2) formData.append("image2", image2);
+      if (image3) formData.append("image3", image3);
+      if (image4) formData.append("image4", image4);
 
       const response = await axios.post(
         backendUrl + "/api/product/add",
@@ -46,12 +54,11 @@ const Add = ({ token }) => {
 
       if (response.data.success) {
         toast.success(response.data.message);
-        setName("");
-        setDescription("");
-        setImage1(false);
-        setImage2(false);
-        setImage3(false);
-        setImage4(false);
+        setProduct({ name: "", description: "" });
+        setImage1(null); 
+        setImage2(null);
+        setImage3(null);
+        setImage4(null);
         setPrice("");
       } else {
         toast.error(response.data.message);
@@ -129,10 +136,11 @@ const Add = ({ token }) => {
       <div className="w-full">
         <p className="mb-2">Product name</p>
         <input
-          onChange={(e) => setName(e.target.value)}
-          value={name}
+          onChange={handleChange}
+          value={product.name}
           className="w-full max-w-[500px] px-3 py-2"
           type="text"
+          name="name" 
           placeholder="Type here"
           required
         />
@@ -141,12 +149,12 @@ const Add = ({ token }) => {
       <div className="w-full">
         <p className="mb-2">Product description</p>
         <textarea
-          onChange={(e) => setDescription(e.target.value)}
-          value={description}
-          className="w-full max-w-[500px] px-3 py-2"
-          type="text"
-          placeholder="Write content here"
-          required
+         onChange={handleChange}
+         value={product.description}
+         className="w-full max-w-[500px] px-3 py-2"
+         name="description" 
+         placeholder="Product description"
+         required
         />
       </div>
 
@@ -155,6 +163,7 @@ const Add = ({ token }) => {
           <p className="mb-2">Product category</p>
           <select
             onChange={(e) => setCategory(e.target.value)}
+            value={category}
             className="w-full px-3 py-2"
           >
             <option value="Men">Men</option>
@@ -167,6 +176,7 @@ const Add = ({ token }) => {
           <p className="mb-2">Sub category</p>
           <select
             onChange={(e) => setSubCategory(e.target.value)}
+            value={subCategory}
             className="w-full px-3 py-2"
           >
             <option value="Topwear">Topwear</option>
